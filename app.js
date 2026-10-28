@@ -6,10 +6,10 @@ const state={profile:'Metro area',values:[...D['Metro area']],selected:2};
 const $=s=>document.querySelector(s);
 const avg=a=>Math.round(a.reduce((x,y)=>x+y,0)/a.length);
 const page=document.body.dataset.page;
-if(page==='home'&&!localStorage.getItem('ddUser')){location.replace('login.html')}
+if(page==='home'&&!sessionStorage.getItem('ddUser')){location.replace('login.html')}
 
 function nav(){
-  $('#site-nav').innerHTML=`<nav class="site-nav"><div class="page-shell nav-inner"><a class="brand" href="index.html"><span class="brand-mark">DD</span><span>Digital Divide</span></a><div class="nav-links"><a class="${page==='home'?'active':''}" href="index.html">Overview</a><a class="${page==='explore'?'active':''}" href="explore.html">Explore</a><a class="${page==='compare'?'active':''}" href="compare.html">Compare</a><a class="${page==='method'?'active':''}" href="method.html">Method</a><a class="${page==='theory'?'active':''}" href="theory.html">Theory</a></div><div class="nav-cta"><a class="nav-login" href="login.html">${localStorage.getItem('ddUser')?'Signed in':'Sign in'}</a><a class="button button-primary" href="explore.html">Try the tool</a><button class="nav-menu" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation">☰</button></div></div></nav>`;
+  $('#site-nav').innerHTML=`<nav class="site-nav"><div class="page-shell nav-inner"><a class="brand" href="index.html"><span class="brand-mark">DD</span><span>Digital Divide</span></a><div class="nav-links"><a class="${page==='home'?'active':''}" href="index.html">Overview</a><a class="${page==='explore'?'active':''}" href="explore.html">Explore</a><a class="${page==='compare'?'active':''}" href="compare.html">Compare</a><a class="${page==='method'?'active':''}" href="method.html">Method</a><a class="${page==='theory'?'active':''}" href="theory.html">Theory</a></div><div class="nav-cta"><a class="nav-login" href="login.html">${sessionStorage.getItem('ddUser')?'Signed in':'Sign in'}</a><a class="button button-primary" href="explore.html">Try the tool</a><button class="nav-menu" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation">☰</button></div></div></nav>`;
   const links=$('.nav-links'); const menu=$('.nav-menu'); links.id='primary-navigation';
   menu.addEventListener('click',()=>{const open=links.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close navigation':'Open navigation');menu.textContent=open?'×':'☰'});
   links.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{links.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open navigation');menu.textContent='☰'}));
@@ -64,7 +64,7 @@ function auth(){
   const form=$('#login-form');if(!form)return;
   const identity=$('#identity'),label=$('#identity-label');
   document.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-mode]').forEach(item=>item.classList.remove('active'));button.classList.add('active');const phone=button.dataset.mode==='phone';label.firstChild.textContent=phone?'Phone number':'Email address';identity.type=phone?'tel':'email';identity.placeholder=phone?'+91 98765 43210':'you@example.com';identity.autocomplete=phone?'tel':'email';identity.pattern=phone?'[0-9+()\- ]{7,}':'';identity.value='';identity.focus()}));
-  form.addEventListener('submit',e=>{e.preventDefault();const value=identity.value.trim();localStorage.setItem('ddUser',value);$('#form-message').textContent='Signed in. Taking you to the overview…';setTimeout(()=>location.href='index.html',500)});
+  form.addEventListener('submit',e=>{e.preventDefault();const value=identity.value.trim();sessionStorage.setItem('ddUser',value);$('#form-message').textContent='Signed in. Taking you to the overview…';setTimeout(()=>location.href='index.html',500)});
 }
 nav();footer();
 if(page==='explore'){profileTabs();setupRings();setupControls();renderExplore()}

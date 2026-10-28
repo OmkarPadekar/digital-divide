@@ -80,8 +80,16 @@ function profile(){
   if(saved){const data=JSON.parse(saved);const date=new Date(data.savedAt);$('#profile-index').textContent=data.score;$('#profile-band').textContent=data.score<40?'Severely constrained':data.score<60?'Emerging':data.score<80?'Progressing':'Strong';$('#profile-saved-at').textContent=`Saved ${date.toLocaleDateString()}`;$('#profile-summary').textContent=`${data.profile} · Your latest assessment across four digital inclusion layers.`;$('#profile-breakdown').innerHTML=N.map((name,i)=>`<div class="profile-breakdown-row"><span><i style="background:${C[i]}"></i>${name}</span><strong>${data.values[i]}</strong><div><b style="width:${data.values[i]}%;background:${C[i]}"></b></div></div>`).join('')}
   $('#sign-out').addEventListener('click',()=>{sessionStorage.clear();location.href='login.html'});
 }
+function motion(){
+  const targets=document.querySelectorAll('.section,.chart-card,.layer-card,.theory-section,.method-row,.callout-panel,.profile-next,.theory-intro');
+  targets.forEach((element,index)=>{element.classList.add('motion-target');element.style.setProperty('--motion-delay',`${Math.min(index%5,4)*70}ms`)});
+  if(!('IntersectionObserver' in window)){targets.forEach(element=>element.classList.add('in'));return}
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in');observer.unobserve(entry.target)}}),{threshold:.14,rootMargin:'0px 0px -35px'});
+  targets.forEach(element=>observer.observe(element));
+}
 nav();footer();
 if(page==='explore'){profileTabs();setupRings();setupControls();renderExplore()}
 if(page==='compare'){bars();funnel();trend()}
 auth();
 profile();
+motion();

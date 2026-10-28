@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Explore — Digital Divide</title>
   <meta name="description" content="Explore layered digital divide scores and calculate a community profile.">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body data-page="explore">
   <div id="site-nav"></div>
@@ -19,12 +19,12 @@
           <div class="ring-stage"><svg id="rings" viewBox="0 0 360 360" role="img" aria-label="Interactive four-layer score chart"></svg></div>
           <ul class="legend legend-large" id="legend"></ul>
         </div>
-        <div class="chart-card calculator-card"><div class="card-topline"><span>Calculate a profile</span><button class="text-button" id="reset-calc" type="button">Reset values</button></div><p class="card-intro">Adjust the sliders to see how access and outcomes diverge.</p><div id="controls" class="controls"></div><div class="score-summary"><div><span>Access only</span><strong id="sSingle">0</strong></div><div class="summary-highlight"><span>Layered score</span><strong id="sMulti">0</strong></div></div><p id="gapnote" class="note" aria-live="polite"></p></div>
+        <div class="chart-card calculator-card"><div class="card-topline"><span>Calculate a profile</span><button class="text-button" id="reset-calc" type="button">Reset values</button></div><p class="card-intro">Set each layer from 0 to 100, then calculate an index that shows how complete the digital journey is.</p><div id="controls" class="controls"></div><div class="index-result" aria-live="polite"><div><span class="result-kicker">Digital Divide Index</span><strong id="index-score">0</strong><span id="index-band" class="result-band">—</span></div><p id="index-description">Your result will appear here after you calculate the profile.</p></div><div class="calculator-actions"><button class="button button-primary" id="calculate-index" type="button">Calculate index <span aria-hidden="true">→</span></button><button class="button button-outline" id="save-profile" type="button">Save to profile</button></div><div class="score-summary"><div><span>Access only</span><strong id="sSingle">0</strong></div><div class="summary-highlight"><span>Layered score</span><strong id="sMulti">0</strong></div></div><p id="gapnote" class="note" aria-live="polite"></p></div>
       </div>
       <div class="chart-card radar-card"><div class="card-topline"><div><span>Shape of the gap</span><h2>Community vs national average</h2></div><span class="chart-key"><i class="key-dashed"></i> National average</span></div><svg id="radar" viewBox="0 0 720 390" role="img" aria-label="Radar chart comparing a community with the national average"></svg></div>
     </div></section>
   </main>
   <div id="site-footer"></div>
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>

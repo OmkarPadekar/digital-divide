@@ -6,15 +6,15 @@ const state={profile:'Metro area',values:[...D['Metro area']],selected:2};
 const $=s=>document.querySelector(s);
 const avg=a=>Math.round(a.reduce((x,y)=>x+y,0)/a.length);
 const page=document.body.dataset.page;
-if(page==='home'&&!sessionStorage.getItem('ddUser')){location.replace('login.html')}
+if((page==='home'||page==='profile')&&!sessionStorage.getItem('ddUser')){location.replace('login.html')}
 
 function nav(){
-  $('#site-nav').innerHTML=`<nav class="site-nav"><div class="page-shell nav-inner"><a class="brand" href="index.html"><span class="brand-mark">DD</span><span>Digital Divide</span></a><div class="nav-links"><a class="${page==='home'?'active':''}" href="index.html">Overview</a><a class="${page==='explore'?'active':''}" href="explore.html">Explore</a><a class="${page==='compare'?'active':''}" href="compare.html">Compare</a><a class="${page==='method'?'active':''}" href="method.html">Method</a><a class="${page==='theory'?'active':''}" href="theory.html">Theory</a></div><div class="nav-cta"><a class="nav-login" href="login.html">${sessionStorage.getItem('ddUser')?'Signed in':'Sign in'}</a><a class="button button-primary" href="explore.html">Try the tool</a><button class="nav-menu" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation">☰</button></div></div></nav>`;
+  $('#site-nav').innerHTML=`<nav class="site-nav"><div class="page-shell nav-inner"><a class="brand" href="index.html"><span class="brand-mark">DD</span><span>Digital Divide</span></a><div class="nav-links"><a class="${page==='home'?'active':''}" href="index.html">Overview</a><a class="${page==='explore'?'active':''}" href="explore.html">Explore</a><a class="${page==='compare'?'active':''}" href="compare.html">Compare</a><a class="${page==='method'?'active':''}" href="method.html">Method</a><a class="${page==='theory'?'active':''}" href="theory.html">Theory</a><a class="${page==='profile'?'active':''}" href="profile.html">Profile</a></div><div class="nav-cta"><a class="nav-login" href="profile.html">${sessionStorage.getItem('ddUser')?'Profile':'Sign in'}</a><a class="button button-primary" href="explore.html">Try the tool</a><button class="nav-menu" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation">☰</button></div></div></nav>`;
   const links=$('.nav-links'); const menu=$('.nav-menu'); links.id='primary-navigation';
   menu.addEventListener('click',()=>{const open=links.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close navigation':'Open navigation');menu.textContent=open?'×':'☰'});
   links.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{links.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open navigation');menu.textContent='☰'}));
 }
-function footer(){if(!$('#site-footer'))return;$('#site-footer').innerHTML=`<footer><div class="page-shell footer-inner"><span>Digital Divide · A layered way to measure connection.</span><div class="footer-links"><a href="method.html">Method</a><a href="login.html">Sign in</a></div></div></footer>`}
+function footer(){if(!$('#site-footer'))return;$('#site-footer').innerHTML=`<footer><div class="page-shell footer-inner"><span>Digital Divide · A layered way to measure connection.</span><div class="footer-links"><a href="method.html">Method</a><a href="theory.html">Theory</a><a href="profile.html">Profile</a></div></div></footer>`}
 function profileTabs(){
   const el=$('#profile-tabs'); if(!el)return;
   el.innerHTML=Object.keys(D).map(n=>`<button type="button" aria-pressed="${n===state.profile}">${n}</button>`).join('');
@@ -33,6 +33,13 @@ function setupControls(){
   el.innerHTML=N.map((n,i)=>`<div class="control-row"><label for="range-${i}">${n}</label><output id="output-${i}">0</output><input id="range-${i}" type="range" min="0" max="100" value="0" aria-label="${n} score"></div>`).join('');
   N.forEach((_,i)=>$('#range-'+i).addEventListener('input',e=>{state.values[i]=+e.target.value;state.profile='Custom profile';profileTabs();renderExplore()}));
   $('#reset-calc').addEventListener('click',()=>{state.profile='Metro area';state.values=[...D['Metro area']];state.selected=2;profileTabs();renderExplore()});
+  $('#calculate-index').addEventListener('click',()=>{setIndexResult(avg(state.values));const button=$('#calculate-index');button.innerHTML='Calculated <span aria-hidden="true">✓</span>';setTimeout(()=>button.innerHTML='Calculate index <span aria-hidden="true">→</span>',1400)});
+  $('#save-profile').addEventListener('click',()=>{sessionStorage.setItem('ddAssessment',JSON.stringify({profile:state.profile,values:state.values,score:avg(state.values),savedAt:new Date().toISOString()}));const button=$('#save-profile');button.textContent='Saved to profile ✓';setTimeout(()=>button.textContent='Save to profile',1600)});
+}
+function setIndexResult(score){
+  const band=score<40?'Severely constrained':score<60?'Emerging':score<80?'Progressing':'Strong';
+  const description=score<40?'Major barriers remain across the digital journey.':score<60?'Access is taking hold, but several layers still need support.':score<80?'The profile is progressing, with clear room to strengthen the weaker layers.':'The profile is strong across the four layers, with a balanced path to impact.';
+  if($('#index-score')){$('#index-score').textContent=score;$('#index-band').textContent=band;$('#index-description').textContent=description}
 }
 function renderExplore(){
   if(!$('#rings'))return;
@@ -40,7 +47,7 @@ function renderExplore(){
   values.forEach((v,i)=>{const ring=$('#ring-'+i);const r=[148,116,84,52][i],circ=2*Math.PI*r;ring.style.strokeDashoffset=circ*(1-v/100);ring.classList.toggle('selected',i===selected);ring.setAttribute('aria-label',`${N[i]} score ${v}`);$('#output-'+i).textContent=v;$('#range-'+i).value=v;$('#lg-'+i).innerHTML=`<i style="background:${C[i]}"></i><span>${N[i]}</span><b>${v}</b>`});
   const labelRadius=[148,116,84,52][selected],labelX=180+labelRadius*.71,labelY=180-labelRadius*.71;
   $('#ring-label').innerHTML=`<rect x="${labelX-23}" y="${labelY-18}" width="46" height="36" rx="12" fill="${C[selected]}"/><text x="${labelX}" y="${labelY+7}" text-anchor="middle" fill="#fff" font-size="16" font-weight="800">${values[selected]}</text>`;
-  $('#sSingle').textContent=values[0];$('#sMulti').textContent=m;
+  $('#sSingle').textContent=values[0];$('#sMulti').textContent=m;setIndexResult(m);
   const gap=values[0]-m,weakest=values.indexOf(Math.min(...values));
   $('#gapnote').textContent=gap>=15?`Access overstates progress by ${gap} points. The weakest layer is ${N[weakest].toLowerCase()}.`:gap>=5?`There is a ${gap}-point gap between access and the layered picture.`:`The layers are relatively balanced. Keep an eye on ${N[weakest].toLowerCase()}.`;
   radar(values);
@@ -66,7 +73,15 @@ function auth(){
   document.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-mode]').forEach(item=>item.classList.remove('active'));button.classList.add('active');const phone=button.dataset.mode==='phone';label.firstChild.textContent=phone?'Phone number':'Email address';identity.type=phone?'tel':'email';identity.placeholder=phone?'+91 98765 43210':'you@example.com';identity.autocomplete=phone?'tel':'email';identity.pattern=phone?'[0-9+()\- ]{7,}':'';identity.value='';identity.focus()}));
   form.addEventListener('submit',e=>{e.preventDefault();const value=identity.value.trim();sessionStorage.setItem('ddUser',value);$('#form-message').textContent='Signed in. Taking you to the overview…';setTimeout(()=>location.href='index.html',500)});
 }
+function profile(){
+  if(page!=='profile')return;
+  const contact=sessionStorage.getItem('ddUser')||'—';$('#profile-contact').textContent=contact;$('#profile-avatar').textContent=contact.slice(0,2).toUpperCase();
+  const saved=sessionStorage.getItem('ddAssessment');
+  if(saved){const data=JSON.parse(saved);const date=new Date(data.savedAt);$('#profile-index').textContent=data.score;$('#profile-band').textContent=data.score<40?'Severely constrained':data.score<60?'Emerging':data.score<80?'Progressing':'Strong';$('#profile-saved-at').textContent=`Saved ${date.toLocaleDateString()}`;$('#profile-summary').textContent=`${data.profile} · Your latest assessment across four digital inclusion layers.`;$('#profile-breakdown').innerHTML=N.map((name,i)=>`<div class="profile-breakdown-row"><span><i style="background:${C[i]}"></i>${name}</span><strong>${data.values[i]}</strong><div><b style="width:${data.values[i]}%;background:${C[i]}"></b></div></div>`).join('')}
+  $('#sign-out').addEventListener('click',()=>{sessionStorage.clear();location.href='login.html'});
+}
 nav();footer();
 if(page==='explore'){profileTabs();setupRings();setupControls();renderExplore()}
 if(page==='compare'){bars();funnel();trend()}
 auth();
+profile();

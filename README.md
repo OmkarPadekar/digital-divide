@@ -9,6 +9,7 @@ A multi-page frontend that explains the digital divide across four layers: infra
 - `compare.html` — grouped comparison, drop-off funnel and trend chart
 - `method.html` — framework and scoring explanation
 - `theory.html` — editorial context and theory behind the framework
+- `profile.html` — session profile with saved Digital Divide Index and layer breakdown
 - `login.html` — client-side sign-in flow that persists a local session
 
 ## Run locally
@@ -19,4 +20,4 @@ Open `index.html` directly in a browser, or serve the folder with any static ser
 python3 -m http.server 4173
 ```
 
-The scores are illustrative values. The calculator is frontend-only and stores no personal data beyond the local browser sign-in label.
+The scores are illustrative values. The calculator is frontend-only and stores the signed-in label and saved assessment in the current browser session.

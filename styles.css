@@ -23,3 +23,6 @@ html{background:var(--bg);transition:background-color .45s ease,color .45s ease}
 
 /* Distribution charts */
 svg .box-median{stroke:var(--ink);stroke-width:3.5;stroke-linecap:round}svg .dot{fill-opacity:.62;stroke:var(--surface);stroke-width:1.5;transition:fill-opacity .2s,r .2s}svg .dot:hover{fill-opacity:1;r:8}
+
+/* Dark mode fixes */
+[data-theme="dark"] .site-nav{background:rgba(11,16,23,.84);border-bottom-color:rgba(52,66,82,.8)}[data-theme="dark"] .index-result{background:#1a2d4d}[data-theme="dark"] .tag-blue{background:#1e3b68;color:#8fbcff}[data-theme="dark"] .tag-green{background:#12382a;color:#6edba5}[data-theme="dark"] .tag-orange{background:#3d2f10;color:#ffd078}[data-theme="dark"] .tag-red{background:#432121;color:#f58e88}[data-theme="dark"] .result-band{color:#8fbcff}[data-theme="dark"] .index-result strong{color:#8fbcff}

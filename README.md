@@ -8,6 +8,7 @@ A multi-page frontend that explains the digital divide across four layers: infra
 - `explore.html` — interactive ring chart, calculator and radar comparison
 - `compare.html` — grouped comparison, drop-off funnel and trend chart
 - `method.html` — framework and scoring explanation
+- `theory.html` — editorial context and theory behind the framework
 - `login.html` — client-side sign-in flow that persists a local session
 
 ## Run locally

@@ -90,9 +90,41 @@ function motion(){
   const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in');observer.unobserve(entry.target)}}),{threshold:.14,rootMargin:'0px 0px -35px'});
   targets.forEach(element=>observer.observe(element));
 }
+function districts(){
+  let t=20260;const rnd=()=>{t|=0;t=t+0x6D2B79F5|0;let x=Math.imul(t^t>>>15,1|t);x=x+Math.imul(x^x>>>7,61|x)^x;return((x^x>>>14)>>>0)/4294967296};
+  const gauss=()=>Math.sqrt(-2*Math.log(1-rnd()))*Math.cos(2*Math.PI*rnd());
+  const sd=[11,15,16,17];
+  return Array.from({length:48},()=>{const z=gauss();return NAT.map((m,k)=>Math.max(0,Math.min(100,Math.round(m+sd[k]*(.65*z+.76*gauss())))))});
+}
+function quant(a,p){const i=(a.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return a[lo]+(a[hi]-a[lo])*(i-lo)}
+function boxplot(){
+  const svg=$('#boxsvg');if(!svg)return;const rows=districts(),W=860,H=420,l=55,r=28,b=62,top=24,plotH=H-b-top,slot=(W-l-r)/4,y=v=>H-b-plotH*v/100;
+  let s='';[0,25,50,75,100].forEach(v=>s+=`<line class="grid" x1="${l}" x2="${W-r}" y1="${y(v)}" y2="${y(v)}"/><text x="${l-12}" y="${y(v)+4}" text-anchor="end">${v}</text>`);
+  N.forEach((n,k)=>{
+    const a=rows.map(d=>d[k]).sort((p,q)=>p-q),q1=quant(a,.25),med=quant(a,.5),q3=quant(a,.75),iqr=q3-q1;
+    const inside=a.filter(v=>v>=q1-1.5*iqr&&v<=q3+1.5*iqr),lo=inside[0],hi=inside[inside.length-1],out=a.filter(v=>v<lo||v>hi);
+    const cx=l+slot*k+slot/2,w=70;
+    s+=`<line x1="${cx}" x2="${cx}" y1="${y(hi)}" y2="${y(lo)}" stroke="${C[k]}" stroke-width="2.5"/><line x1="${cx-18}" x2="${cx+18}" y1="${y(hi)}" y2="${y(hi)}" stroke="${C[k]}" stroke-width="2.5"/><line x1="${cx-18}" x2="${cx+18}" y1="${y(lo)}" y2="${y(lo)}" stroke="${C[k]}" stroke-width="2.5"/>`;
+    s+=`<rect x="${cx-w/2}" y="${y(q3)}" width="${w}" height="${y(q1)-y(q3)}" rx="8" fill="${C[k]}" fill-opacity=".22" stroke="${C[k]}" stroke-width="2.5"/><line class="box-median" x1="${cx-w/2}" x2="${cx+w/2}" y1="${y(med)}" y2="${y(med)}"/>`;
+    s+=out.map(v=>`<circle cx="${cx}" cy="${y(v)}" r="4.5" fill="none" stroke="${C[k]}" stroke-width="2"/>`).join('');
+    s+=`<text class="bar-value" x="${cx+w/2+10}" y="${y(med)+4}">${Math.round(med)}</text><text class="strong" x="${cx}" y="${H-28}" text-anchor="middle">${n}</text><text x="${cx}" y="${H-10}" text-anchor="middle">IQR ${Math.round(iqr)}</text>`;
+  });
+  svg.innerHTML=s;
+}
+function scatter(){
+  const svg=$('#scattersvg');if(!svg)return;const rows=districts(),W=860,H=440,l=60,r=28,b=60,top=24,x=v=>l+(W-l-r)*v/100,y=v=>H-b-(H-b-top)*v/100;
+  const xs=rows.map(d=>d[2]),ys=rows.map(d=>d[1]),n=rows.length,mx=xs.reduce((p,q)=>p+q,0)/n,my=ys.reduce((p,q)=>p+q,0)/n;
+  let sxy=0,sxx=0,syy=0;xs.forEach((v,i)=>{sxy+=(v-mx)*(ys[i]-my);sxx+=(v-mx)**2;syy+=(ys[i]-my)**2});
+  const slope=sxy/sxx,icpt=my-slope*mx,rr=sxy/Math.sqrt(sxx*syy),x0=Math.min(...xs),x1=Math.max(...xs);
+  let s='';[0,25,50,75,100].forEach(v=>s+=`<line class="grid" x1="${l}" x2="${W-r}" y1="${y(v)}" y2="${y(v)}"/><text x="${l-12}" y="${y(v)+4}" text-anchor="end">${v}</text><line class="grid" y1="${top}" y2="${H-b}" x1="${x(v)}" x2="${x(v)}"/><text x="${x(v)}" y="${H-b+22}" text-anchor="middle">${v}</text>`);
+  s+=rows.map((d,i)=>`<circle class="dot" cx="${x(xs[i])}" cy="${y(ys[i])}" r="6.5" fill="${C[1]}"><title>Affordability ${xs[i]}, Digital literacy ${ys[i]}</title></circle>`).join('');
+  s+=`<line x1="${x(x0)}" y1="${y(slope*x0+icpt)}" x2="${x(x1)}" y2="${y(slope*x1+icpt)}" stroke="${C[3]}" stroke-width="3" stroke-dasharray="8 6" stroke-linecap="round"/>`;
+  s+=`<text class="strong" x="${x(x1)-6}" y="${y(slope*x1+icpt)-14}" text-anchor="end">r = ${rr.toFixed(2)}</text><text x="${(l+W-r)/2}" y="${H-12}" text-anchor="middle">Affordability score</text><text transform="translate(16 ${(top+H-b)/2}) rotate(-90)" text-anchor="middle">Digital literacy score</text>`;
+  svg.innerHTML=s;
+}
 nav();footer();
 if(page==='explore'){profileTabs();setupRings();setupControls();renderExplore()}
-if(page==='compare'){bars();funnel();trend()}
+if(page==='compare'){bars();funnel();trend();boxplot();scatter()}
 auth();
 profile();
 motion();

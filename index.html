@@ -1,75 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The Digital Divide, measured in layers</title>
-<meta name="description" content="Infrastructure, digital literacy, affordability and socio-economic outcomes: how the digital divide is really measured.">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Digital Divide — See the whole picture</title>
+  <meta name="description" content="A clearer way to understand the digital divide across access, skills, affordability and outcomes.">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-<nav class="nav"><div class="nav-in">
-<a href="#top" class="brand">Digital Divide</a>
-<div class="links"><a href="#layers">Layers</a><a href="#explore">Explorer</a><a href="#compare">Compare</a><a href="#dropoff">Drop-off</a><a href="#trend">Trend</a></div>
-</div></nav>
+<body data-page="home">
+  <div id="site-nav"></div>
+  <main>
+    <section class="home-hero page-shell">
+      <div class="eyebrow">A clearer measure of connection</div>
+      <div class="hero-grid">
+        <div>
+          <h1>The digital divide is more than a signal bar.</h1>
+          <p class="lede">Connection is only the first step. Explore the four layers that determine whether people can access, use and benefit from the digital world.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="explore.html">Explore the layers <span aria-hidden="true">↗</span></a>
+            <a class="button button-quiet" href="method.html">How it works</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="Four layered circles representing the digital divide">
+          <div class="orb orb-1"><span>Access</span></div>
+          <div class="orb orb-2"><span>Skills</span></div>
+          <div class="orb orb-3"><span>Cost</span></div>
+          <div class="orb orb-4"><span>Impact</span></div>
+          <div class="orb-core">4<br><small>layers</small></div>
+        </div>
+      </div>
+    </section>
 
-<header class="hero" id="top">
-<h1>One number can’t<br>measure the divide.</h1>
-<p class="sub">It is tracked across four layers at once. Select a community to see how it scores on each.</p>
-<div class="seg" id="seg1" role="group" aria-label="Community profile"></div>
-<figure class="ringwrap">
-<svg id="rings" viewBox="0 0 300 300" role="img" aria-label="Four concentric rings showing the score for each layer"></svg>
-<div class="center"><b id="cnum">0</b><span>Layered score</span></div>
-</figure>
-<ul class="legend" id="legend"></ul>
-</header>
+    <section class="section section-soft">
+      <div class="page-shell">
+        <div class="section-heading split-heading">
+          <div><div class="eyebrow">A better question</div><h2>Is a connection enough?</h2></div>
+          <p>Traditional access statistics can hide the people who are still left behind. A more useful view follows the journey from infrastructure to real-life outcomes.</p>
+        </div>
+        <div class="layer-grid">
+          <article class="layer-card layer-blue"><span class="layer-number">01</span><h3>Infrastructure</h3><p>Is a reliable connection available?</p></article>
+          <article class="layer-card layer-green"><span class="layer-number">02</span><h3>Digital literacy</h3><p>Can people use it confidently and safely?</p></article>
+          <article class="layer-card layer-orange"><span class="layer-number">03</span><h3>Affordability</h3><p>Can households sustain the cost?</p></article>
+          <article class="layer-card layer-red"><span class="layer-number">04</span><h3>Outcomes</h3><p>Does access improve everyday life?</p></article>
+        </div>
+      </div>
+    </section>
 
-<main>
-<section id="layers" class="sec"><div class="wrap">
-<h2>Four layers. One picture.</h2>
-<p class="sub left">Each layer asks a different question. A gap in any one of them can hold a community back.</p>
-<div class="grid4">
-<article class="card lay" style="--c:var(--c1)"><h3>Physical infrastructure</h3><p>Is a connection available?</p><small>Coverage, speed, devices</small></article>
-<article class="card lay" style="--c:var(--c2)"><h3>Digital literacy</h3><p>Can people use it well?</p><small>Operating skills, safety, productive use</small></article>
-<article class="card lay" style="--c:var(--c3)"><h3>Affordability</h3><p>Can people pay for it?</p><small>Data cost versus income, device price</small></article>
-<article class="card lay" style="--c:var(--c4)"><h3>Socio-economic outcomes</h3><p>Does it change lives?</p><small>Education, income, public services</small></article>
-</div></div></section>
-
-<section id="explore" class="sec alt"><div class="wrap">
-<h2>Shape the gap.</h2>
-<p class="sub left">Move a slider to change a layer. The radar compares the community with the national average.</p>
-<div class="two">
-<div class="card"><svg id="radar" viewBox="0 0 360 340" role="img" aria-label="Radar chart of four layer scores against national average"></svg></div>
-<div class="card">
-<div id="ctl" class="ctl"></div>
-<div class="scores">
-<div><b id="sSingle">0</b><small>Access-only score</small></div>
-<div><b id="sMulti">0</b><small>Layered score</small></div>
-</div>
-<p id="gapnote" class="note" aria-live="polite"></p>
-</div></div></div></section>
-
-<section id="compare" class="sec"><div class="wrap">
-<h2>What one metric hides.</h2>
-<p class="sub left">Access-only scores look healthy. The layered score shows what is missing.</p>
-<div class="card"><svg id="bars" viewBox="0 0 720 320" role="img" aria-label="Grouped bars comparing access-only and layered scores for four communities"></svg>
-<div class="key"><span><i style="background:#8E8E93"></i>Access-only</span><span><i style="background:var(--c1)"></i>Layered</span></div></div>
-</div></section>
-
-<section id="dropoff" class="sec alt"><div class="wrap">
-<h2>Where people drop out.</h2>
-<p class="sub left">Of every 100 people, how many make it through each layer? Illustrative national figures.</p>
-<div class="card funnel" id="funnel"></div>
-</div></section>
-
-<section id="trend" class="sec"><div class="wrap">
-<h2>Is the gap closing?</h2>
-<p class="sub left">Infrastructure is racing ahead. Outcomes are not keeping pace.</p>
-<div class="card"><svg id="trendsvg" viewBox="0 0 720 340" role="img" aria-label="Line chart of four layer scores from 2018 to 2025"></svg></div>
-</div></section>
-</main>
-
-<footer><div class="wrap">All scores are illustrative values for demonstration, not measured data. Frontend only: no backend, no database.</div></footer>
-<script src="app.js"></script>
+    <section class="section">
+      <div class="page-shell callout-panel">
+        <div><div class="eyebrow">Make it personal</div><h2>Build a score for any community.</h2><p>Choose a profile or adjust every layer yourself. The calculator shows where a single access number overstates progress.</p></div>
+        <a class="button button-dark" href="explore.html">Open the calculator <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="app.js"></script>
 </body>
 </html>

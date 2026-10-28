@@ -6,6 +6,7 @@ const state={profile:'Metro area',values:[...D['Metro area']],selected:2};
 const $=s=>document.querySelector(s);
 const avg=a=>Math.round(a.reduce((x,y)=>x+y,0)/a.length);
 const page=document.body.dataset.page;
+if(page==='home'&&!localStorage.getItem('ddUser')){location.replace('login.html')}
 
 function nav(){
   $('#site-nav').innerHTML=`<nav class="site-nav"><div class="page-shell nav-inner"><a class="brand" href="index.html"><span class="brand-mark">DD</span><span>Digital Divide</span></a><div class="nav-links"><a class="${page==='home'?'active':''}" href="index.html">Overview</a><a class="${page==='explore'?'active':''}" href="explore.html">Explore</a><a class="${page==='compare'?'active':''}" href="compare.html">Compare</a><a class="${page==='method'?'active':''}" href="method.html">Method</a><a class="${page==='theory'?'active':''}" href="theory.html">Theory</a></div><div class="nav-cta"><a class="nav-login" href="login.html">${localStorage.getItem('ddUser')?'Signed in':'Sign in'}</a><a class="button button-primary" href="explore.html">Try the tool</a><button class="nav-menu" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation">☰</button></div></div></nav>`;
@@ -39,8 +40,7 @@ function renderExplore(){
   values.forEach((v,i)=>{const ring=$('#ring-'+i);const r=[148,116,84,52][i],circ=2*Math.PI*r;ring.style.strokeDashoffset=circ*(1-v/100);ring.classList.toggle('selected',i===selected);ring.setAttribute('aria-label',`${N[i]} score ${v}`);$('#output-'+i).textContent=v;$('#range-'+i).value=v;$('#lg-'+i).innerHTML=`<i style="background:${C[i]}"></i><span>${N[i]}</span><b>${v}</b>`});
   const labelRadius=[148,116,84,52][selected],labelX=180+labelRadius*.71,labelY=180-labelRadius*.71;
   $('#ring-label').innerHTML=`<rect x="${labelX-23}" y="${labelY-18}" width="46" height="36" rx="12" fill="${C[selected]}"/><text x="${labelX}" y="${labelY+7}" text-anchor="middle" fill="#fff" font-size="16" font-weight="800">${values[selected]}</text>`;
-  $('#cnum').textContent='';$('#sSingle').textContent=values[0];$('#sMulti').textContent=m;$('#center-label').textContent='Click a ring to inspect';
-  $('#detail-value').textContent=values[selected];$('#detail-name').textContent=N[selected];
+  $('#sSingle').textContent=values[0];$('#sMulti').textContent=m;
   const gap=values[0]-m,weakest=values.indexOf(Math.min(...values));
   $('#gapnote').textContent=gap>=15?`Access overstates progress by ${gap} points. The weakest layer is ${N[weakest].toLowerCase()}.`:gap>=5?`There is a ${gap}-point gap between access and the layered picture.`:`The layers are relatively balanced. Keep an eye on ${N[weakest].toLowerCase()}.`;
   radar(values);
@@ -61,7 +61,10 @@ function trend(){
   const svg=$('#trendsvg');if(!svg)return;const Y=[2018,2019,2020,2021,2022,2023,2024,2025],T=[[52,57,63,68,72,76,79,81],[38,41,45,49,52,55,57,58],[35,37,40,43,46,48,50,51],[24,27,31,34,37,40,42,44]],W=860,H=420,l=55,r=155,b=48,top=24,x=i=>l+(W-l-r)*i/7,y=v=>H-b-(H-b-top)*v/100;let s='';[0,25,50,75,100].forEach(v=>s+=`<line class="grid" x1="${l}" x2="${W-r+30}" y1="${y(v)}" y2="${y(v)}"/><text x="${l-12}" y="${y(v)+4}" text-anchor="end">${v}</text>`);Y.forEach((v,i)=>s+=`<text x="${x(i)}" y="${H-17}" text-anchor="middle">${v}</text>`);T.forEach((a,k)=>{s+=`<path d="${a.map((v,i)=>(i?'L':'M')+x(i)+','+y(v)).join('')}" fill="none" stroke="${C[k]}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${x(7)}" cy="${y(a[7])}" r="6" fill="${C[k]}"/><text class="strong" x="${x(7)+13}" y="${y(a[7])+4}">${N[k]} ${a[7]}</text>`});svg.innerHTML=s;
 }
 function auth(){
-  const form=$('#login-form');if(!form)return;form.addEventListener('submit',e=>{e.preventDefault();const email=$('#email').value.trim();localStorage.setItem('ddUser',email);$('#form-message').textContent='You’re signed in. Taking you to the explorer…';setTimeout(()=>location.href='explore.html',500)});$('#continue-guest').addEventListener('click',()=>location.href='explore.html');
+  const form=$('#login-form');if(!form)return;
+  const identity=$('#identity'),label=$('#identity-label');
+  document.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-mode]').forEach(item=>item.classList.remove('active'));button.classList.add('active');const phone=button.dataset.mode==='phone';label.firstChild.textContent=phone?'Phone number':'Email address';identity.type=phone?'tel':'email';identity.placeholder=phone?'+91 98765 43210':'you@example.com';identity.autocomplete=phone?'tel':'email';identity.pattern=phone?'[0-9+()\- ]{7,}':'';identity.value='';identity.focus()}));
+  form.addEventListener('submit',e=>{e.preventDefault();const value=identity.value.trim();localStorage.setItem('ddUser',value);$('#form-message').textContent='Signed in. Taking you to the overview…';setTimeout(()=>location.href='index.html',500)});
 }
 nav();footer();
 if(page==='explore'){profileTabs();setupRings();setupControls();renderExplore()}

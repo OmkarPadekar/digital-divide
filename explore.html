@@ -5,19 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Explore — Digital Divide</title>
   <meta name="description" content="Explore layered digital divide scores and calculate a community profile.">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body data-page="explore">
   <div id="site-nav"></div>
   <main>
-    <section class="page-hero page-shell"><div class="eyebrow">Interactive explorer</div><h1>See what the headline number misses.</h1><p class="lede">Select a profile, then tune each layer. Click a ring to inspect its score without losing the full picture.</p></section>
+    <section class="page-hero page-shell"><div class="eyebrow">Interactive explorer</div><h1>See what the headline number misses.</h1><p class="lede">Select a profile, then tune each layer to see how the full score changes.</p></section>
     <section class="section section-soft explorer-section"><div class="page-shell">
       <div class="profile-row"><div><div class="eyebrow">Start with a profile</div><h2>Choose a community</h2></div><div id="profile-tabs" class="segmented" role="group" aria-label="Community profile"></div></div>
       <div class="explorer-grid">
         <div class="chart-card ring-card">
           <div class="card-topline"><span>Layered score</span><span class="live-chip"><i></i>Live</span></div>
-          <div class="ring-stage"><svg id="rings" viewBox="0 0 360 360" role="img" aria-label="Interactive four-layer score chart"></svg><div class="ring-center"><strong id="cnum">0</strong><span id="center-label">Overall score</span></div></div>
-          <div id="ring-detail" class="ring-detail" aria-live="polite"><span class="detail-kicker">Click a ring to inspect it</span><strong id="detail-value">—</strong><span id="detail-name">Each layer has its own score</span></div>
+          <div class="ring-stage"><svg id="rings" viewBox="0 0 360 360" role="img" aria-label="Interactive four-layer score chart"></svg></div>
           <ul class="legend legend-large" id="legend"></ul>
         </div>
         <div class="chart-card calculator-card"><div class="card-topline"><span>Calculate a profile</span><button class="text-button" id="reset-calc" type="button">Reset values</button></div><p class="card-intro">Adjust the sliders to see how access and outcomes diverge.</p><div id="controls" class="controls"></div><div class="score-summary"><div><span>Access only</span><strong id="sSingle">0</strong></div><div class="summary-highlight"><span>Layered score</span><strong id="sMulti">0</strong></div></div><p id="gapnote" class="note" aria-live="polite"></p></div>
@@ -26,6 +25,6 @@
     </div></section>
   </main>
   <div id="site-footer"></div>
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
